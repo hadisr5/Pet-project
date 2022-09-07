@@ -16,9 +16,6 @@ type hub struct {
 	broadcastChn    chan Message
 }
 
-func main() {
-
-}
 func newHub() *hub {
 	return &hub{
 		clients:         make(map[string]*websocket.Conn),
