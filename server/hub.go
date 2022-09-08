@@ -39,6 +39,7 @@ func (h *hub) run() {
 }
 func (h *hub) addClient(conn *websocket.Conn) {
 	h.clients[conn.RemoteAddr().String()] = conn
+	fmt.Println("Clients" ,h.clients) 
 
 }
 func (h *hub) removeClient(conn *websocket.Conn) {
