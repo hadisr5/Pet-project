@@ -16,25 +16,27 @@ type Message struct {
 }
 
 func main() {
-	conn, err := websocket.Dial("ws://localhost:9686", "")
+	conn, err := websocket.Dial("ws://localhost:9686", "", CreateDemoIp())
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 		return
 	}
 	defer conn.Close()
 
 	go receive(conn)
+
 	send(conn)
+
 }
 
-func createDemoIp() string {
+func CreateDemoIp() string {
 	//192.168.1.1
-	var array [4]int
-	for i := 0; i < len(array); i++ {
+	var arry [4]int
+	for i := 0; i < len(arry); i++ {
 		rand.Seed(time.Now().UnixNano())
-		array[i] = rand.Intn(256)
+		arry[i] = rand.Intn(256)
 	}
-	return fmt.Sprintf("http://%d.%d.%d.%d", array[0], array[1], array[2], array[3])
+	return fmt.Sprintf("http://%d.%d.%d.%d", arry[0], arry[1], arry[2], arry[3])
 }
 
 func receive(conn *websocket.Conn) {
@@ -42,16 +44,16 @@ func receive(conn *websocket.Conn) {
 		var m Message
 		err := websocket.JSON.Receive(conn, &m)
 		if err != nil {
-			log.Fatalln("error in Recive Data :", err)
+			log.Fatalln("Error in Recieve Data :", err)
 			continue
 		}
-		fmt.Println("Message from server :", m.Text)
-
+		fmt.Println("Message from Server :", m.Text)
 	}
 }
 
 func send(conn *websocket.Conn) {
 	scanner := bufio.NewScanner(os.Stdin)
+
 	for scanner.Scan() {
 		text := scanner.Text()
 		m := Message{
@@ -59,8 +61,9 @@ func send(conn *websocket.Conn) {
 		}
 		err := websocket.JSON.Send(conn, m)
 		if err != nil {
-			fmt.Println("Error in send Data :", err)
+			fmt.Println("Error in Send Data, ", err)
 			continue
 		}
 	}
+
 }
