@@ -9,6 +9,11 @@
 <body>
     <input type="text" id="message"/>
     <button id="btnSend">Send message</button>
+    <div id=" messages">
+
+    </div>
+
+    
     <script
   src="https://code.jquery.com/jquery-2.2.4.min.js"
   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
@@ -19,6 +24,13 @@
         var message = $("message").val()
         socket.send(JSON.stringify({text: message}))
     })
+
+    socket.onmessage=function(result){
+      var message =JSON.parse(result.data).text;
+      var messageElement = document.createElement("div");
+      messageElement.textContent = message;
+      $("#message").prepend(messageElement);
+    }
   </script>
 
 </body>
